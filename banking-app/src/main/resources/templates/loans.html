@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>User Loans</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f8;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #003366;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #003366;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .button-general-transfer {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .button-general-transfer:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+<div class="container">
+    <h1>Your Loans</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Credit ID</th>
+            <th>Amount</th>
+            <th>To Account</th>
+            <th>Interest Rate</th>
+            <th>Intent</th>
+            <th>Status</th>
+            <th>Grade</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="loanApplication : ${loanApplications}">
+            <td th:text="${loanApplication.id}"></td>
+            <td th:text="${loanApplication.amount}"></td>
+            <td th:text="${loanApplication.toAccount.cardNumber}"></td>
+            <td th:text="${loanApplication.interestRate}"></td>
+            <td th:text="${loanApplication.intent}"></td>
+            <td th:text="${loanApplication.status}"></td>
+            <td th:text="${loanApplication.grade}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/accounts" class="button-general-transfer">Back</a>
+</div>
+</body>
+</html>

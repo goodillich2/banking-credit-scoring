@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Loan Application</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f8;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #003366;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"], input[type="email"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .update-button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .update-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="form-container">
+    <h1>Loan Application</h1>
+    <div class="form-group">
+        <div th:if="${!userDetailsExists}">
+            <a href="/profile/profileDetails" class="update-button">Update Profile Details</a>
+        </div>
+        <div th:if="${#lists.isEmpty(accounts)}">
+            <a href="/accounts/add" class="update-button">Add Account</a>
+        </div>
+        <div th:if="${userDetailsExists and not #lists.isEmpty(accounts)}">
+            <form th:action="@{/loans/loan_application}" th:object="${loanApplicationDTO}" method="post">
+                <div class="form-group">
+                    <label for="intent">Loan Intent:</label>
+                    <select id="intent" name="intent" th:field="*{intent}" required>
+                        <option th:each="intent : ${loanIntentOptions}"
+                                th:value="${intent}" th:text="${intent}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Loan Amount:</label>
+                    <input type="number" id="amount" name="amount" th:field="*{amount}" required min="1000"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="interestRate">Interest rate:</label>
+                    <input type="number" th:field="*{interestRate}" id="interestRate" min="5" max="25" required/>
+                </div>
+
+                <div class="form-group">
+                    <label for="grade">Loan Grade:</label>
+                    <select id="grade" name="grade" th:field="*{grade}" required>
+                        <option th:each="grade : ${loanGradeOptions}"
+                                th:value="${grade}" th:text="${grade}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="account">To account:</label>
+                    <select id="account" name="account" th:field="*{toAccount}" required>
+                        <option th:each="account : ${accounts}" th:value="${account.cardNumber}"
+                                th:text="${account.cardNumber}"></option>
+                    </select>
+                </div>
+                <input type="submit" value="Submit"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

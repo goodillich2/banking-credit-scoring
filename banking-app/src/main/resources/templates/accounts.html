@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Accounts</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #003366;
+        }
+
+        .account-cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .account-card {
+            background: linear-gradient(135deg, #ff8a00, #e52e71);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px;
+            width: 350px;
+            height: 220px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .account-logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .account-number {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+
+        .account-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .account-balance {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .account-actions {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            width: 310px;
+        }
+
+        .button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            flex: 1;
+        }
+
+        .button-delete {
+            background: #f44336;
+        }
+
+        .button-transfer {
+            background: #008CBA;
+        }
+
+        .button-view {
+            background: #ffa500;
+        }
+
+        a.button:link, a.button:visited {
+            color: white;
+        }
+
+        a.button:hover, .button:hover {
+            opacity: 0.9;
+        }
+
+        .button-add-transfer {
+            text-align: center;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .button-add {
+            background: #4CAF50;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .button-general-transfer {
+            background: #008CBA;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<h1>Your Accounts</h1>
+<div class="button-add-transfer">
+    <a href="/accounts/add" class="button-add">Create New Account</a>
+    <a href="/accounts/transfer" class="button-general-transfer">General Transfer Funds</a>
+    <a href="/loans" class="button-general-transfer">Loans</a>
+    <a href="/loans/loan_application" class="button-general-transfer">Loan Application</a>
+</div>
+
+<div class="account-cards-container">
+    <div th:each="account : ${accounts}" class="account-card">
+        <div class="account-logo">Your Bank</div>
+        <div class="account-number" th:text="${account.cardNumber}"></div>
+        <div class="account-info">
+            <span th:text="'Type: ' + ${account.accountType}"></span>
+            <span th:text="'Expires: ' + ${account.expiryMonth} + '/' + ${account.expiryYear}"></span>
+        </div>
+        <div class="account-balance">Balance: <span th:text="${account.balance}"></span></div>
+        <div class="account-info">
+            <span th:text="'CVV: ' + ${account.cvv}"></span>
+        </div>
+        <div class="account-actions">
+            <form th:action="@{/accounts/delete/{accountId}(accountId=${account.accountId})}" method="post">
+                <button type="submit" class="button button-delete">Close Account</button>
+            </form>
+            <a th:href="@{/accounts/transfer(fromCardNumber=${account.cardNumber})}" class="button button-transfer">Transfer Funds</a>
+            <a th:href="@{/transactions/{accountId}(accountId=${account.accountId})}" class="button button-view">View Transactions</a>
+        </div>
+    </div>
+</div>
+
+<div th:if="${successMessage}" style="text-align: center; color: green;">
+    <p th:text="${successMessage}"></p>
+</div>
+
+<div th:if="${errorMessage}" style="text-align: center; color: red;">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+</body>
+</html>

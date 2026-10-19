@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Profile</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f8;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #003366;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"], input[type="email"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="form-container">
+    <h1>Create Profile Details</h1>
+    <form th:action="@{/profile/profileDetails}" th:object="${userDetails}" method="post">
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" th:field="*{age}" required min="18"/>
+        </div>
+
+        <div class="form-group">
+            <label for="monthIncome">Month income</label>
+            <input type="number" id="monthIncome" name="monthIncome" th:field="*{monthIncome}" required min="0"/>
+        </div>
+
+        <div class="form-group">
+            <label for="employmentLength">Employment Length (years):</label>
+            <input type="number" id="employmentLength" name="employmentLength" th:field="*{employmentLength}" required
+                   min="0"/>
+        </div>
+
+        <div class="form-group">
+            <label for="homeOwnership">Home Ownership:</label>
+            <select id="homeOwnership" name="homeOwnership" th:field="*{homeOwnership}" required>
+                <option th:each="ownership : ${homeOwnershipOptions}"
+                        th:value="${ownership}" th:text="${ownership}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="previousLoans">Previous Loans:</label>
+            <input type="number" th:field="*{previousLoans}" id="previousLoans" min="0" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="previousDefault">Previous Default:</label>
+            <select id="previousDefault" name="homeOwnership" th:field="*{previousDefault}" required>
+                <option th:each="previousDefault : ${previousDefaultOptions}"
+                        th:value="${previousDefault}" th:text="${previousDefault}"></option>
+            </select>
+        </div>
+        <input type="submit" value="Submit"/>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+version: "3.4"
+
+name: banking
+services:
+  postgres:
+    image: postgres:latest
+    platform: linux/amd64
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - db_data:/var/lib/postgresql
+  banking-app:
+    build:
+      context: banking-app
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    restart: always
+    stdin_open: true
+    tty: true
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+  loan-processor:
+    build:
+      context: loan-processor
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    restart: always
+    stdin_open: true
+    ports:
+      - "8888:8888"
+    depends_on:
+      - banking-app
+
+volumes:
+  db_data:
